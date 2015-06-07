@@ -26,6 +26,23 @@ loadCredentials = ({ username, password })->
   data.password = password if password?
   data
 
+parsePage = (res) ->
+  $ = cheerio.load res.body
+  data = null
+  $('select option[selected=selected]').each ->
+    e = $ @
+    label = e.text()
+    amount = $('.amount strong').text()
+    match = label.match /^(\d+)年(\d+)月(\d+)日.*?(未?確定).*$/
+    year = parseInt match[1], 10
+    month = parseInt(match[2], 10) - 1 # Jan is 0
+    day = parseInt match[3], 10
+    data =
+      date: moment({ year, month, day }).format('YYYY-MM-DD')
+      fixed: match[4] is '確定'
+      amount: parseInt(amount.replace(/[\s,円]/g, ''), 10)
+  data
+
 authorize = (cookieStore, username, password) ->
   request
     jar: cookieStore
@@ -55,22 +72,7 @@ fetchForPage = (cookieStore, pageNo) ->
     qs:
       detailMonth: pageNo
       output: 'web'
-  .then (res) ->
-    $ = cheerio.load res.body
-    data = null
-    $('select option[selected=selected]').each ->
-      e = $ @
-      label = e.text()
-      amount = $('.amount strong').text()
-      match = label.match /^(\d+)年(\d+)月(\d+)日.*?(未?確定).*$/
-      year = parseInt match[1], 10
-      month = parseInt(match[2], 10) - 1 # Jan is 0
-      day = parseInt match[3], 10
-      data =
-        date: moment({ year, month, day }).format('YYYY-MM-DD')
-        fixed: match[4] is '確定'
-        amount: parseInt(amount.replace(/[\s,円]/g, ''), 10)
-    data
+  .then parsePage
 
 delayedResolve = (value, delay) ->
   new Promise (resolve) ->

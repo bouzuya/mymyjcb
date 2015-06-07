@@ -12,14 +12,28 @@ getVersion = ->
   packageJson = JSON.parse data
   packageJson.version
 
-authorize = (cookieStore) ->
+loadCredentials = ({ username, password })->
+  # 1. Command-line options
+  # 2. Environment Variables
+  # 3. The credential file (~/.mymyjcb.json)
+  configFile = path.join process.env.HOME, '.mymyjcb.json'
+  data = {}
+  if fs.existsSync configFile
+    data = fs.readFileSync configFile, encoding: 'utf-8'
+  data.username = process.env.MYMYJCB_USERNAME if process.env.MYMYJCB_USERNAME?
+  data.password = process.env.MYMYJCB_PASSWORD if process.env.MYMYJCB_PASSWORD?
+  data.username = username if username?
+  data.password = password if password?
+  data
+
+authorize = (cookieStore, username, password) ->
   request
     jar: cookieStore
     method: 'POST'
     url: 'https://my.jcb.co.jp/iss-pc/member/user_manage/Login'
     form:
-      userId: process.env.MYMYJCB_USERNAME
-      password: process.env.MYMYJCB_PASSWORD
+      userId: username
+      password: password
       # 'login.x': '131'
       # 'login.y': '43'
       screenId: '0102001'
@@ -64,14 +78,18 @@ delayedResolve = (value, delay) ->
       resolve value
     , delay
 
-fetch = ->
+fetch = (credentials) ->
   # get cookie store
   jar = request.jar()
 
   Promise.resolve()
   .then ->
+    loadCredentials credentials
+  .then ({ username, password }) ->
+    throw new Error('username is not defined') unless username?
+    throw new Error('password is not defined') unless password?
     console.log 'authorize'
-    authorize jar
+    authorize jar, username, password
   .then ->
     console.log 'fetch cookie'
     fetchForCookie jar
@@ -97,11 +115,10 @@ fetch = ->
   .catch (e) ->
     console.error e
 
-action = ->
-  fetch()
-
 module.exports = ->
   program = commander()
   program.version getVersion()
-  program.action action
+  program.option '--username <username>', 'MyJCB username'
+  program.option '--password <password>', 'MyJCB password'
+  program.action fetch
   program.execute()

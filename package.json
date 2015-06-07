@@ -1,7 +1,7 @@
 {
   "name": "mymyjcb",
   "description": "A script for checking my credit card details in MyJCB",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": "bouzuya",
   "bin": {
     "mymyjcb": "./bin/mymyjcb"

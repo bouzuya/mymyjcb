@@ -9,6 +9,9 @@
   "bugs": {
     "url": "https://github.com/bouzuya/mymyjcb/issues"
   },
+  "dependencies": {
+    "commander-b": "^0.2.2"
+  },
   "devDependencies": {
     "del": "^1.2.0",
     "gulp": "^3.9.0",

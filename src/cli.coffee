@@ -1,5 +1,6 @@
 fs = require 'fs'
 path = require 'path'
+cheerio = require 'cheerio'
 commander = require 'commander-b'
 request = require './request'
 
@@ -30,6 +31,30 @@ fetchForCookie = (cookieStore) ->
       detailMonth: 1
       output: 'web'
 
+fetchForPage = (cookieStore, pageNo) ->
+  throw new Error("invalid pageNo: #{pageNo}") if pageNo < 0 or 6 < pageNo
+  request
+    jar: jar
+    url: 'https://my.jcb.co.jp/iss-pc/member/details_inquiry/detail.html'
+    qs:
+      detailMonth: pageNo
+      output: 'web'
+  .then (res) ->
+    $ = cheerio.load res.body
+    data = null
+    $('select option[selected=selected]').each ->
+      e = $ @
+      data =
+        label: e.text()
+        amount: $('.amount strong').text()
+    data
+
+delayedResolve = (value, delay) ->
+  new Promise (resolve) ->
+    setTimeout ->
+      resolve value
+    , delay
+
 fetch = ->
   # get cookie store
   jar = request.jar()
@@ -41,6 +66,20 @@ fetch = ->
   .then ->
     console.log 'fetch cookie'
     fetchForCookie jar
+  .then ->
+    console.log 'fetch [0..6]'
+    [0..6].reduce (promise, i) ->
+      promise
+      .then (result) ->
+        console.log("fetch [#{i}]")
+        fetchForPage jar, i
+        .then ({ label, amount } = {}) ->
+          result[label] = amount if label?
+        .then ->
+          deleyedResolve result, 500
+    , Promise.resolve {}
+  .then (months) ->
+    console.log months
   .catch (e) ->
     console.error e
 

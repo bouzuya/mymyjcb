@@ -1,0 +1,19 @@
+{
+  "name": "mymyjcb",
+  "description": "A script for checking my credit card details in MyJCB",
+  "version": "0.0.0",
+  "author": "bouzuya",
+  "bugs": {
+    "url": "https://github.com/bouzuya/mymyjcb/issues"
+  },
+  "homepage": "https://github.com/bouzuya/mymyjcb",
+  "license": "MIT",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bouzuya/mymyjcb.git"
+  },
+  "scripts": {
+    "test": "gulp test"
+  }
+}

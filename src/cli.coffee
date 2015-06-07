@@ -92,6 +92,7 @@ fetch = ->
     values = for _, { date, fixed, amount } of months
       price = amount.toString().replace /(\d)(?=(\d{3})+(?!\d))/g, '$1,'
       [date, price, fixed]
+    console.log '\n' # new line
     console.log table [header].concat(values), align: ['l', 'r', 'l']
   .catch (e) ->
     console.error e

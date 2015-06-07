@@ -2,6 +2,14 @@
 
 A script for checking my credit card details in MyJCB
 
+## Installation
+
+    $ npm install -g https://github.com/bouzuya/mymyjcb/archive/master.tar.gz
+
+or
+
+    $ npm install -g https://github.com/bouzuya/mymyjcb/archive/{VERSION}.tar.gz
+
 ## License
 
 [MIT](LICENSE)

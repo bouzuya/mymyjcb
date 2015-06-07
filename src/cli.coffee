@@ -8,9 +8,11 @@ getVersion = ->
   packageJson = JSON.parse data
   packageJson.version
 
+action = ->
+  console.log 'Hello, MyMyJCB!'
+
 module.exports = ->
   program = commander()
   program.version getVersion()
-  program.action ->
-    console.log 'Hello, MyMyJCB!'
+  program.action action
   program.execute()

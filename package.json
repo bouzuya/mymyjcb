@@ -3,6 +3,9 @@
   "description": "A script for checking my credit card details in MyJCB",
   "version": "0.0.0",
   "author": "bouzuya",
+  "bin": {
+    "mymyjcb": "./bin/mymyjcb"
+  },
   "bugs": {
     "url": "https://github.com/bouzuya/mymyjcb/issues"
   },

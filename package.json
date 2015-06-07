@@ -14,6 +14,7 @@
     "commander-b": "^0.2.2",
     "es6-promise": "^2.2.0",
     "iconv": "^2.1.8",
+    "moment": "^2.10.3",
     "request": "^2.57.0",
     "tough-cookie": "^1.2.0"
   },

@@ -2,6 +2,7 @@ fs = require 'fs'
 path = require 'path'
 cheerio = require 'cheerio'
 commander = require 'commander-b'
+moment = require 'moment'
 request = require './request'
 
 getVersion = ->
@@ -44,9 +45,16 @@ fetchForPage = (cookieStore, pageNo) ->
     data = null
     $('select option[selected=selected]').each ->
       e = $ @
+      label = e.text()
+      amount = $('.amount strong').text()
+      match = label.match /^(\d+)年(\d+)月(\d+)日.*?(未?確定).*$/
+      year = parseInt match[1], 10
+      month = parseInt(match[2], 10) - 1 # Jan is 0
+      day = parseInt match[3], 10
       data =
-        label: e.text()
-        amount: $('.amount strong').text()
+        date: moment({ year, month, day }).format('YYYY-MM-DD')
+        fixed: match[4] is '確定'
+        amount: parseInt(amount.replace(/[\s,円]/g, ''), 10)
     data
 
 delayedResolve = (value, delay) ->
@@ -73,8 +81,8 @@ fetch = ->
       .then (result) ->
         console.log("fetch [#{i}]")
         fetchForPage jar, i
-        .then ({ label, amount } = {}) ->
-          result[label] = amount if label?
+        .then ({ date, fixed, amount } = {}) ->
+          result[date] = { date, fixed, amount } if date?
         .then ->
           delayedResolve result, 500
     , Promise.resolve {}

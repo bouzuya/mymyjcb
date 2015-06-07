@@ -10,7 +10,9 @@
     "url": "https://github.com/bouzuya/mymyjcb/issues"
   },
   "dependencies": {
-    "commander-b": "^0.2.2"
+    "commander-b": "^0.2.2",
+    "es6-promise": "^2.2.0",
+    "request": "^2.57.0"
   },
   "devDependencies": {
     "del": "^1.2.0",

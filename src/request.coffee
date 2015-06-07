@@ -16,3 +16,5 @@ module.exports = (params) ->
     body = new Buffer res.body, 'binary'
     res.body = iconv.convert(body).toString()
     res
+
+module.exports.jar = request.jar.bind request

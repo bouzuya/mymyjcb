@@ -22,6 +22,14 @@ authorize = (cookieStore) ->
       screenId: '0102001'
       loginRouteId: '0102001'
 
+fetchForCookie = (cookieStore) ->
+  request
+    jar: cookieStore
+    url: 'https://my.jcb.co.jp/iss-pc/member/details_inquiry/detail.html'
+    qs:
+      detailMonth: 1
+      output: 'web'
+
 fetch = ->
   # get cookie store
   jar = request.jar()
@@ -30,6 +38,9 @@ fetch = ->
   .then ->
     console.log 'authorize'
     authorize jar
+  .then ->
+    console.log 'fetch cookie'
+    fetchForCookie jar
   .catch (e) ->
     console.error e
 

@@ -34,7 +34,7 @@ fetchForCookie = (cookieStore) ->
 fetchForPage = (cookieStore, pageNo) ->
   throw new Error("invalid pageNo: #{pageNo}") if pageNo < 0 or 6 < pageNo
   request
-    jar: jar
+    jar: cookieStore
     url: 'https://my.jcb.co.jp/iss-pc/member/details_inquiry/detail.html'
     qs:
       detailMonth: pageNo
@@ -76,7 +76,7 @@ fetch = ->
         .then ({ label, amount } = {}) ->
           result[label] = amount if label?
         .then ->
-          deleyedResolve result, 500
+          delayedResolve result, 500
     , Promise.resolve {}
   .then (months) ->
     console.log months

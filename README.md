@@ -10,6 +10,12 @@ or
 
     $ npm install -g https://github.com/bouzuya/mymyjcb/archive/{VERSION}.tar.gz
 
+## Usage
+
+    $ export MYMYJCB_USERNAME='<your username>'
+    $ export MYMYJCB_PASSWORD='<your password>'
+    $ mymyjcb
+
 ## License
 
 [MIT](LICENSE)

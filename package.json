@@ -13,7 +13,8 @@
     "commander-b": "^0.2.2",
     "es6-promise": "^2.2.0",
     "iconv": "^2.1.8",
-    "request": "^2.57.0"
+    "request": "^2.57.0",
+    "tough-cookie": "^1.2.0"
   },
   "devDependencies": {
     "del": "^1.2.0",

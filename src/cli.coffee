@@ -4,6 +4,7 @@ cheerio = require 'cheerio'
 commander = require 'commander-b'
 moment = require 'moment'
 request = require './request'
+table = require 'table-b'
 
 getVersion = ->
   packageJsonFile = path.join __dirname, '../package.json'
@@ -87,7 +88,11 @@ fetch = ->
           delayedResolve result, 500
     , Promise.resolve {}
   .then (months) ->
-    console.log months
+    header = ['date', 'amount', 'fixed']
+    values = for _, { date, fixed, amount } of months
+      price = amount.toString().replace /(\d)(?=(\d{3})+(?!\d))/g, '$1,'
+      [date, price, fixed]
+    console.log table [header].concat(values), align: ['l', 'r', 'l']
   .catch (e) ->
     console.error e
 

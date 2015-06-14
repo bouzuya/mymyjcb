@@ -19,7 +19,7 @@ loadCredentials = ({ username, password })->
   configFile = path.join process.env.HOME, '.mymyjcb.json'
   data = {}
   if fs.existsSync configFile
-    data = fs.readFileSync configFile, encoding: 'utf-8'
+    data = JSON.parse fs.readFileSync configFile, encoding: 'utf-8'
   data.username = process.env.MYMYJCB_USERNAME if process.env.MYMYJCB_USERNAME?
   data.password = process.env.MYMYJCB_PASSWORD if process.env.MYMYJCB_PASSWORD?
   data.username = username if username?

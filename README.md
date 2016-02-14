@@ -1,5 +1,7 @@
 # mymyjcb
 
+**DEPRECATED**
+
 A script for checking my credit card details in MyJCB
 
 ## Installation
